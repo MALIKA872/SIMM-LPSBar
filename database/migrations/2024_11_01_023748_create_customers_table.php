@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('address');
             $table->string('phone');
             $table->string('email');
-            $table->string('pic_name'); // Person In Charge
             $table->timestamps();
         });
     }

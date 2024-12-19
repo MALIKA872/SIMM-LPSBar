@@ -11,13 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('warehouses', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
             $table->string('name');
-            $table->text('address');
-            $table->string('phone');
-            $table->string('pic_name'); // Person In Charge
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('customer_id')->nullable();
+            $table->text('description')->nullable();
+            $table->integer('minimum_stock');
+            $table->decimal('price', 15, 2);
+            $table->string('unit'); // satuan (pcs, box, etc)
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('warehouses');
+        Schema::dropIfExists('products');
     }
 };

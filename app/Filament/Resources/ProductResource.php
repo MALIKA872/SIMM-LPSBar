@@ -3,53 +3,94 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
-use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Forms\Form; // Gunakan namespace yang benar
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\NumberColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\BadgeColumn; // Tetap gunakan BadgeColumn untuk kolom lain
 
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-cube';
+    protected static ?string $navigationGroup = 'Management';
+    protected static ?string $pluralLabel = 'Products';
+    protected static ?string $label = 'Product';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('code')
+                    ->label('Product Code')
+                    ->required()
+                    ->unique(ignoreRecord: true),
+                Forms\Components\TextInput::make('name')
+                    ->label('Product Name')
+                    ->required(),
+                Forms\Components\Select::make('categories_id')
+                    ->relationship('category', 'name')
+                    ->required(),
+                Forms\Components\Select::make('customers_id')
+                    ->relationship('customer', 'name')
+                    ->required(),
+                Forms\Components\Textarea::make('description')
+                    ->label('Description')
+                    ->nullable(),
+                Forms\Components\TextInput::make('minimum_stock')
+                    ->label('Minimum Stock')
+                    ->required()
+                    ->numeric(),
+                Forms\Components\TextInput::make('price')
+                    ->label('Price')
+                    ->required()
+                    ->numeric()
+                    ->prefix('Rp'),
+                Forms\Components\TextInput::make('unit')
+                    ->label('Unit')
+                    ->required()
+                    ->placeholder('e.g., pcs, box, etc'),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                //
-            ])
+        ->columns([
+            TextColumn::make('code')->label('Code')->searchable()->sortable(),
+            TextColumn::make('name')->label('Name')->searchable()->sortable(),
+            TextColumn::make('category.name')->label('Category')->sortable(),
+            TextColumn::make('customer.name')->label('Customer')->sortable(),
+            TextColumn::make('description')->label('Description')->limit(50),
+            TextColumn::make('minimum_stock')->label('Min Stock')->sortable(),
+            TextColumn::make('price')
+                ->label('Price')
+                ->sortable()
+                ->prefix('Rp')  // Menambahkan prefix 'Rp' pada harga
+                ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state, 2, ',', '.')),  // Format angka dengan pemisah ribuan dan desimal
+            BadgeColumn::make('unit')->label('Unit'),
+            TextColumn::make('created_at')->label('Created At')->dateTime(),
+        ])
             ->filters([
-                //
+                // Tambahkan filter jika diperlukan
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 
     public static function getRelations(): array
     {
         return [
-            //
+            // Tambahkan relasi jika diperlukan
         ];
     }
 

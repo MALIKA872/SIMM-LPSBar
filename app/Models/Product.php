@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
+
+
+
     protected $fillable = [
         'code',
         'name',
@@ -19,12 +22,12 @@ class Product extends Model
     ];
 
     public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
-    }
+{
+    return $this->belongsTo(Category::class, 'category_id');  // Menyebutkan nama kolom 'category_id'
+}
 
-    public function stocks(): HasMany
-    {
-        return $this->hasMany(Stock::class);
-    }
+    public function customer(): BelongsTo
+{
+    return $this->belongsTo(Customer::class, 'customer_id');  // Menyebutkan nama kolom
+}
 }

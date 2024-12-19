@@ -12,8 +12,7 @@ class Customer extends Model
         'name',
         'address',
         'phone',
-        'email',
-        'pic_name'
+        'email'
     ];
 
     public function deliveries(): HasMany
