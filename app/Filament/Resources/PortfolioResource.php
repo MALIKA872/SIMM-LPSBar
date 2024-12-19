@@ -34,7 +34,6 @@ class PortfolioResource extends Resource
             FileUpload::make('image')->required()->label('Image'),
             Textarea::make('alamat')->required()->label('alamat'),
             TextInput::make('email')->required()->email()->label('Email'),
-            TextInput::make('role')->required()->email()->label('role'),
         ]);
     }
 
@@ -48,7 +47,6 @@ class PortfolioResource extends Resource
             ImageColumn::make('image')->label('Image'),
             TextColumn::make('alamat')->label('Alamat'),
             TextColumn::make('email')->label('Email'),
-            TextColumn::make('role')->label('Role'),
         ])
             ->filters([
                 //

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->String('image');
             $table->String('alamat');
             $table->String('email');
-            $table->String('role');
+            $table->String('role')->nullable();
             $table->timestamps();
         });
     }
