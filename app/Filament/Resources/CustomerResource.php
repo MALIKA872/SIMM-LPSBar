@@ -14,7 +14,7 @@ use Filament\Tables\Columns\TextColumn;
 class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
-
+    protected static ?string $navigationGroup = 'Customer';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -38,6 +38,8 @@ class CustomerResource extends Resource
                     ->label('Email')
                     ->email()
                     ->required(),
+                Forms\Components\Select::make('products')
+                    ->relationship('products', 'name')
             ]);
     }
 
@@ -49,7 +51,6 @@ class CustomerResource extends Resource
                 TextColumn::make('name')->label('Name')->searchable()->sortable(),
                 TextColumn::make('phone')->label('Phone')->sortable(),
                 TextColumn::make('email')->label('Email')->searchable(),
-                TextColumn::make('pic_name')->label('PIC Name'),
             ])
             ->filters([
                 // Tambahkan filter jika diperlukan

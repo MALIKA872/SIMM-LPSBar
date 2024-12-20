@@ -5,20 +5,18 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
 use Filament\Forms;
-use Filament\Forms\Form; // Gunakan namespace yang benar
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\NumberColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\BadgeColumn; // Tetap gunakan BadgeColumn untuk kolom lain
+use Filament\Tables\Columns\BadgeColumn;
 
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-cube';
-    protected static ?string $navigationGroup = 'Management';
     protected static ?string $pluralLabel = 'Products';
     protected static ?string $label = 'Product';
 
@@ -33,11 +31,8 @@ class ProductResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('Product Name')
                     ->required(),
-                Forms\Components\Select::make('categories_id')
+                Forms\Components\Select::make('category_id')
                     ->relationship('category', 'name')
-                    ->required(),
-                Forms\Components\Select::make('customers_id')
-                    ->relationship('customer', 'name')
                     ->required(),
                 Forms\Components\Textarea::make('description')
                     ->label('Description')
@@ -61,21 +56,20 @@ class ProductResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-        ->columns([
-            TextColumn::make('code')->label('Code')->searchable()->sortable(),
-            TextColumn::make('name')->label('Name')->searchable()->sortable(),
-            TextColumn::make('category.name')->label('Category')->sortable(),
-            TextColumn::make('customer.name')->label('Customer')->sortable(),
-            TextColumn::make('description')->label('Description')->limit(50),
-            TextColumn::make('minimum_stock')->label('Min Stock')->sortable(),
-            TextColumn::make('price')
-                ->label('Price')
-                ->sortable()
-                ->prefix('Rp')  // Menambahkan prefix 'Rp' pada harga
-                ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state, 2, ',', '.')),  // Format angka dengan pemisah ribuan dan desimal
-            BadgeColumn::make('unit')->label('Unit'),
-            TextColumn::make('created_at')->label('Created At')->dateTime(),
-        ])
+            ->columns([
+                TextColumn::make('code')->label('Code')->searchable()->sortable(),
+                TextColumn::make('name')->label('Name')->searchable()->sortable(),
+                TextColumn::make('category.name')->label('Category')->sortable(),
+                TextColumn::make('description')->label('Description')->limit(50),
+                TextColumn::make('minimum_stock')->label('Min Stock')->sortable(),
+                TextColumn::make('price')
+                    ->label('Price')
+                    ->sortable()
+                    ->prefix('Rp')
+                    ->formatStateUsing(fn($state) => 'Rp ' . number_format($state, 2, ',', '.')),
+                BadgeColumn::make('unit')->label('Unit'),
+                TextColumn::make('created_at')->label('Created At')->dateTime(),
+            ])
             ->filters([
                 // Tambahkan filter jika diperlukan
             ])

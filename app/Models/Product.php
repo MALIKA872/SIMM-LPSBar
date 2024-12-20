@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
@@ -22,12 +23,12 @@ class Product extends Model
     ];
 
     public function category(): BelongsTo
-{
-    return $this->belongsTo(Category::class, 'category_id');  // Menyebutkan nama kolom 'category_id'
-}
+    {
+        return $this->belongsTo(Category::class, 'category_id');  // Menyebutkan nama kolom 'category_id'
+    }
 
-    public function customer(): BelongsTo
-{
-    return $this->belongsTo(Customer::class, 'customer_id');  // Menyebutkan nama kolom
-}
+    public function customers(): BelongsToMany
+    {
+        return $this->belongsToMany(Customer::class, 'customer_product', 'product_id', 'customer_id');
+    }
 }
